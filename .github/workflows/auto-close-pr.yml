@@ -1,0 +1,22 @@
+# License: https://unlicense.org
+
+name: auto-close-pr
+
+on:
+  pull_request: 
+    types: 
+      - opened
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-close-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: auto-close-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr close -R $GITHUB_REPOSITORY ${{ github.event.number }} -c "Can not pull request to this repository."
+          gh pr lock -R $GITHUB_REPOSITORY ${{ github.event.number }}
